@@ -28,6 +28,16 @@ public class UserDto {
         this.password = password;
     }
 
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "username='" + username + '\'' +
+                ", company='" + company + '\'' +
+                ", products=" + products +
+                ", password='" + password + '\'' +
+                '}';
+    }
+
     public String getPassword() {
         return password;
     }
