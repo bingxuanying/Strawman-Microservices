@@ -2,6 +2,7 @@ package com.example.authservice.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -20,14 +21,21 @@ public class User {
 
     private String password;
 
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id",
+            referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private Collection<Role> roles;
+
     public User() {
     }
 
-    public User(String username, String company, ArrayList<Integer> products, String password) {
+    public User(String username, String company, ArrayList<Integer> products, String password, Collection<Role> roles) {
         this.username = username;
         this.company = company;
         this.products = products;
         this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
@@ -58,8 +66,8 @@ public class User {
         return products;
     }
 
-    public void setProducts(List<Integer> products) {
-        this.products = (ArrayList<Integer>) products;
+    public void setProducts(ArrayList<Integer> products) {
+        this.products = products;
     }
 
     public String getPassword() {
@@ -68,5 +76,13 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 }

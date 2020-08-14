@@ -1,4 +1,4 @@
-package com.example.authservice.exception;
+package com.example.authservice.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;

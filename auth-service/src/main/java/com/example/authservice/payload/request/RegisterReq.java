@@ -1,4 +1,4 @@
-package com.example.authservice.api.dto;
+package com.example.authservice.payload.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UserDto {
+public class RegisterReq {
     @NotBlank
     private String username;
 
@@ -18,10 +18,10 @@ public class UserDto {
     @NotBlank
     private String password;
 
-    public UserDto(@JsonProperty("username") String username,
-                   @JsonProperty("company") String company,
-                   @JsonProperty("products") ArrayList<Integer> products,
-                   @JsonProperty("password")  String password) {
+    public RegisterReq(@JsonProperty("username") String username,
+                       @JsonProperty("company") String company,
+                       @JsonProperty("products") ArrayList<Integer> products,
+                       @JsonProperty("password")  String password) {
         this.username = username;
         this.company = company;
         this.products = (ArrayList<Integer>) products;

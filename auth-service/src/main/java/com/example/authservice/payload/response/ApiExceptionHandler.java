@@ -1,4 +1,4 @@
-package com.example.authservice.exception;
+package com.example.authservice.payload.response;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
