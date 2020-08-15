@@ -1,7 +1,8 @@
 package com.example.authservice.api;
 
-import com.example.authservice.payload.request.LoginReq;
-import com.example.authservice.payload.request.RegisterReq;
+import com.example.authservice.payload.request.JwtRequest;
+import com.example.authservice.payload.request.LoginRequest;
+import com.example.authservice.payload.request.RegisterRequest;
 import com.example.authservice.payload.response.AuthenticationResponse;
 import com.example.authservice.payload.response.ResBodyTemp;
 import com.example.authservice.service.UserService;
@@ -12,8 +13,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -41,21 +40,30 @@ public class MainController {
     }
 
     @PostMapping(value = "/register")
-    public @ResponseBody ResBodyTemp register(@RequestBody @Valid RegisterReq registerReq) {
-        userService.save(registerReq);
+    public @ResponseBody ResBodyTemp register(@RequestBody @Valid RegisterRequest registerRequest) {
+        userService.save(registerRequest);
         return new ResBodyTemp("VALIDATION_SUCCESS", "successfully registered");
     }
 
-    @PostMapping(value = "/authenticate")
-    public ResponseEntity<?> authenticateUser(@RequestBody @Valid LoginReq loginReq) throws Exception {
+    @PostMapping(value = "/signin")
+    public ResponseEntity<?> authenticateUser(@RequestBody @Valid LoginRequest loginRequest) throws Exception {
         try {
-            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginReq.getUsername(), loginReq.getPassword()));
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         } catch (BadCredentialsException e) {
             throw new Exception("Incorrect username or password", e);
         }
 
-        final String jwt = jwtUtil.generateToken(userService.loadUserByUsername(loginReq.getUsername()));
+        final String jwt = jwtUtil.generateToken(userService.loadUserByUsername(loginRequest.getUsername()));
+
+        /*
+         * TODO: save token to Redis
+         */
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
+    }
+
+    @PostMapping(value = "/authenticate")
+    public boolean authenticateJwt(@RequestBody @Valid JwtRequest jwtRequest) {
+        return jwtUtil.validateToken(jwtRequest.getJwt());
     }
 }

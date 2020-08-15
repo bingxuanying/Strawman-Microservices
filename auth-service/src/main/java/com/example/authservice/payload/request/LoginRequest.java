@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.validation.constraints.NotBlank;
 
-public class LoginReq {
+public class LoginRequest {
 
     @NotBlank
     private String username;
@@ -12,8 +12,8 @@ public class LoginReq {
     @NotBlank
     private String password;
 
-    public LoginReq(@JsonProperty("username") String username,
-                    @JsonProperty("password") String password) {
+    public LoginRequest(@JsonProperty("username") String username,
+                        @JsonProperty("password") String password) {
         this.username = username;
         this.password = password;
     }

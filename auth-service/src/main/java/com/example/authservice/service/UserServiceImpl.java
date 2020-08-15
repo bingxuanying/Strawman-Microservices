@@ -2,7 +2,7 @@ package com.example.authservice.service;
 
 import com.example.authservice.model.ERole;
 import com.example.authservice.model.Role;
-import com.example.authservice.payload.request.RegisterReq;
+import com.example.authservice.payload.request.RegisterRequest;
 import com.example.authservice.model.User;
 import com.example.authservice.repository.RoleRepository;
 import com.example.authservice.repository.UserRepository;
@@ -35,9 +35,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(RegisterReq registerReq) {
+    public User save(RegisterRequest registerRequest) {
 
-        Set<String> strRoles = registerReq.getRoles();
+        Set<String> strRoles = registerRequest.getRoles();
         Set<Role> roles = new HashSet<>();
 
 //        Recognize Registration Role
@@ -67,10 +67,10 @@ public class UserServiceImpl implements UserService {
             });
         }
 
-        User user = new User(registerReq.getUsername(),
-                registerReq.getCompany(),
-                (ArrayList<Integer>) registerReq.getProducts(),
-                passwordEncoder.encode(registerReq.getPassword()),
+        User user = new User(registerRequest.getUsername(),
+                registerRequest.getCompany(),
+                (ArrayList<Integer>) registerRequest.getProducts(),
+                passwordEncoder.encode(registerRequest.getPassword()),
                 roles);
 
 //        if (userRepository.existsById((long) 1)) {

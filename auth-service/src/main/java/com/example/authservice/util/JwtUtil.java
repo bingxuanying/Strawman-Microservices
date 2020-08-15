@@ -55,8 +55,9 @@ public class JwtUtil {
     /*
      * TODO: Connect to Redis and check if the token exits
      */
-    public Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token) {
         final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+//        return (username.equals(dbUsername) && !isTokenExpired(token));
+        return !isTokenExpired(token);
     }
 }

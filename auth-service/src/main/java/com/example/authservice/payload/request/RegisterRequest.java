@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-public class RegisterReq {
+public class RegisterRequest {
     @NotBlank
     private String username;
 
@@ -21,11 +21,11 @@ public class RegisterReq {
 
     private Set<String> roles;
 
-    public RegisterReq(@JsonProperty("username") String username,
-                       @JsonProperty("company") String company,
-                       @JsonProperty("products") ArrayList<Integer> products,
-                       @JsonProperty("password")  String password,
-                       @JsonProperty("roles") Set<String> roles) {
+    public RegisterRequest(@JsonProperty("username") String username,
+                           @JsonProperty("company") String company,
+                           @JsonProperty("products") ArrayList<Integer> products,
+                           @JsonProperty("password")  String password,
+                           @JsonProperty("roles") Set<String> roles) {
         this.username = username;
         this.company = company;
         this.products = (ArrayList<Integer>) products;
