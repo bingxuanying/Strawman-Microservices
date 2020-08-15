@@ -1,8 +1,10 @@
 package com.example.authservice.service;
 
+import com.example.authservice.model.ERole;
 import com.example.authservice.model.Role;
 import com.example.authservice.payload.request.RegisterReq;
 import com.example.authservice.model.User;
+import com.example.authservice.repository.RoleRepository;
 import com.example.authservice.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,19 +24,54 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
     public User save(RegisterReq registerReq) {
+
+        Set<String> strRoles = registerReq.getRoles();
+        Set<Role> roles = new HashSet<>();
+
+//        Recognize Registration Role
+        if (strRoles == null) {
+            System.out.println(ERole.ROLE_USER);
+            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
+                    .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
+            roles.add(userRole);
+        } else {
+            strRoles.forEach(role -> {
+                switch (role) {
+                    case "admin":
+                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Role(Admin) is not found"));
+                        roles.add(adminRole);
+                        break;
+                    case "mod":
+                        Role modRole = roleRepository.findByName(ERole.ROLE_MODERATOR)
+                                .orElseThrow(() -> new RuntimeException("Error: Role(Mod) is not found"));
+                        roles.add(modRole);
+                        break;
+                    default:
+                        Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                                .orElseThrow(() -> new RuntimeException("Error: Role(User) is not found"));
+                        roles.add(userRole);
+                }
+            });
+        }
+
         User user = new User(registerReq.getUsername(),
                 registerReq.getCompany(),
                 (ArrayList<Integer>) registerReq.getProducts(),
                 passwordEncoder.encode(registerReq.getPassword()),
-                Arrays.asList(new Role("ROLE_USER")));
+                roles);
 
 //        if (userRepository.existsById((long) 1)) {
 //            var find = userRepository.getOne((long) 1);
@@ -64,6 +101,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList());
+        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
     }
 }

@@ -1,7 +1,6 @@
 package com.example.authservice.model;
 
 import javax.persistence.*;
-import java.util.Arrays;
 
 @Entity
 @Table(name = "roles")
@@ -10,12 +9,14 @@ public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+
+    @Enumerated(EnumType.STRING)
+    private ERole name;
 
     public Role() {
     }
 
-    public Role(String name) {
+    public Role(ERole name) {
         super();
         this.name = name;
     }
@@ -28,11 +29,11 @@ public class Role {
         this.id = id;
     }
 
-    public String getName() {
+    public ERole getName() {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(ERole name) {
         this.name = name;
     }
 

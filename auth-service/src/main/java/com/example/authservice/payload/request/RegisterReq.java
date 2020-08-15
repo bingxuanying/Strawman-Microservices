@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class RegisterReq {
     @NotBlank
@@ -18,14 +19,18 @@ public class RegisterReq {
     @NotBlank
     private String password;
 
+    private Set<String> roles;
+
     public RegisterReq(@JsonProperty("username") String username,
                        @JsonProperty("company") String company,
                        @JsonProperty("products") ArrayList<Integer> products,
-                       @JsonProperty("password")  String password) {
+                       @JsonProperty("password")  String password,
+                       @JsonProperty("roles") Set<String> roles) {
         this.username = username;
         this.company = company;
         this.products = (ArrayList<Integer>) products;
         this.password = password;
+        this.roles = roles;
     }
 
     @Override
@@ -36,6 +41,14 @@ public class RegisterReq {
                 ", products=" + products +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
     }
 
     public String getPassword() {
@@ -66,7 +79,8 @@ public class RegisterReq {
         return products;
     }
 
-    public void setProducts(List<Integer> products) {
-        this.products = (ArrayList<Integer>) products;
+    public void setProducts(ArrayList<Integer> products) {
+        this.products = products;
     }
+
 }

@@ -1,9 +1,7 @@
 package com.example.authservice.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
@@ -25,12 +23,12 @@ public class User {
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id",
             referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    private Collection<Role> roles;
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
 
-    public User(String username, String company, ArrayList<Integer> products, String password, Collection<Role> roles) {
+    public User(String username, String company, ArrayList<Integer> products, String password, Set<Role> roles) {
         this.username = username;
         this.company = company;
         this.products = products;
@@ -78,11 +76,11 @@ public class User {
         this.password = password;
     }
 
-    public Collection<Role> getRoles() {
+    public Set<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Collection<Role> roles) {
+    public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
 }

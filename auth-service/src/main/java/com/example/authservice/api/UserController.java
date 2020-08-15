@@ -34,7 +34,7 @@ public class UserController {
 
     @PostMapping(value = "/register")
     public @ResponseBody ResBodyTemp register(@RequestBody @Valid RegisterReq registerReq) {
-        userService.save((registerReq));
+        userService.save(registerReq);
         System.out.println(registerReq.toString());
         return new ResBodyTemp("VALIDATION_SUCCESS", "successfully registered");
     }
