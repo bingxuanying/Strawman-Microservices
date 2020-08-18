@@ -8,6 +8,7 @@ import com.example.authservice.payload.response.ResBodyTemp;
 import com.example.authservice.service.UserService;
 import com.example.authservice.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -27,16 +28,15 @@ public class MainController {
     @Autowired
     private JwtUtil jwtUtil;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    private static final String REDIS_INDEX_KEY = "JWT";
+
     private UserService userService;
 
     public MainController(UserService userService) {
         this.userService = userService;
-    }
-
-    @GetMapping
-    @ResponseBody
-    public String test() {
-        return "Hello there";
     }
 
     @PostMapping(value = "/register")
@@ -56,8 +56,9 @@ public class MainController {
         final String jwt = jwtUtil.generateToken(userService.loadUserByUsername(loginRequest.getUsername()));
 
         /*
-         * TODO: save token to Redis
+         * TODO: test save token to Redis
          */
+        redisTemplate.opsForHash().put(REDIS_INDEX_KEY, 1,  jwt);
 
         return ResponseEntity.ok(new AuthenticationResponse(jwt));
     }
