@@ -1,12 +1,14 @@
 package com.example.authservice.service;
 
-import com.example.authservice.model.ERole;
-import com.example.authservice.model.Role;
+import com.example.authservice.entities.ERole;
+import com.example.authservice.entities.Role;
 import com.example.authservice.payload.request.RegisterRequest;
-import com.example.authservice.model.User;
+import com.example.authservice.entities.User;
 import com.example.authservice.repository.RoleRepository;
 import com.example.authservice.repository.UserRepository;
+import com.example.authservice.security.model.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -40,9 +42,8 @@ public class UserServiceImpl implements UserService {
         Set<String> strRoles = registerRequest.getRoles();
         Set<Role> roles = new HashSet<>();
 
-//        Recognize Registration Role
+        // Recognize registration role
         if (strRoles == null) {
-            System.out.println(ERole.ROLE_USER);
             Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
             roles.add(userRole);
@@ -67,24 +68,14 @@ public class UserServiceImpl implements UserService {
             });
         }
 
+        // Create new user
         User user = new User(registerRequest.getUsername(),
                 registerRequest.getCompany(),
                 (ArrayList<Integer>) registerRequest.getProducts(),
                 passwordEncoder.encode(registerRequest.getPassword()),
                 roles);
 
-//        if (userRepository.existsById((long) 1)) {
-//            var find = userRepository.getOne((long) 1);
-//            Set<Integer> set = new LinkedHashSet<>(find.getProducts());
-//
-//            List<Integer> newList = new ArrayList<>(Arrays.asList(1,2,3));
-//            set.addAll(newList);
-//            List<Integer> combinedList = new ArrayList<>(set);
-//
-//            System.out.println("old: " + find.getProducts());
-//            System.out.println("new: " + combinedList);
-//        }
-
+        // Save to DB
         return userRepository.save(user);
     }
 
@@ -97,10 +88,7 @@ public class UserServiceImpl implements UserService {
             throw new UsernameNotFoundException("Invaild username or password");
         }
 
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), mapRolesToAuthorities(user.getRoles()));
+        return new SecurityUser(user);
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
-        return roles.stream().map(role -> new SimpleGrantedAuthority(role.getName().name())).collect(Collectors.toList());
-    }
 }

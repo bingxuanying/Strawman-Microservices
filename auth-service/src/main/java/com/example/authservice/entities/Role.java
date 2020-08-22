@@ -1,4 +1,4 @@
-package com.example.authservice.model;
+package com.example.authservice.entities;
 
 import javax.persistence.*;
 

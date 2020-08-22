@@ -1,4 +1,4 @@
-package com.example.authservice.model;
+package com.example.authservice.entities;
 
 public enum ERole {
     ROLE_USER,

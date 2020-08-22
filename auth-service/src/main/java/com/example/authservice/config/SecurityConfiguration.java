@@ -1,5 +1,7 @@
 package com.example.authservice.config;
 
+import com.example.authservice.security.filters.UsernamePasswordAuthFilter;
+import com.example.authservice.security.providers.UsernamePasswordAuthProvider;
 import com.example.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -11,10 +13,14 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    @Autowired
+    private UsernamePasswordAuthProvider usernamePasswordAuthProvider;
 
     @Autowired
     private UserService userService;
@@ -24,15 +30,20 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
-    }
-
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(usernamePasswordAuthProvider);
+    }
+
+    @Bean
+    public UsernamePasswordAuthFilter usernamePasswordAuthFilter() {
+        return new UsernamePasswordAuthFilter();
     }
 
     @Override
@@ -41,10 +52,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf()
                 .disable()
                 .authorizeRequests().antMatchers("/auth/**").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .anyRequest().authenticated();
 
+        http.addFilterAt(usernamePasswordAuthFilter(),
+                BasicAuthenticationFilter.class);
     }
 }
