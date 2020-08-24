@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username", "company"}))
 public class User {
 
     @Id
@@ -15,11 +15,18 @@ public class User {
 
     private String company;
 
-    private ArrayList<Integer> products;
-
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Integer bedTime;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "users_products", joinColumns = @JoinColumn(name = "user_id",
+            referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id", referencedColumnName = "id"))
+    private Set<Product> products = new HashSet<>();
+
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id",
             referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
@@ -28,13 +35,15 @@ public class User {
     public User() {
     }
 
-    public User(String username, String company, ArrayList<Integer> products, String password, Set<Role> roles) {
+    public User(String username, String company, String password, Integer bedTime, Set<Product> products, Set<Role> roles) {
         this.username = username;
         this.company = company;
         this.products = products;
         this.password = password;
+        this.bedTime = bedTime;
         this.roles = roles;
     }
+
 
     public Long getId() {
         return id;
@@ -60,11 +69,11 @@ public class User {
         this.company = company;
     }
 
-    public ArrayList<Integer> getProducts() {
+    public Set<Product> getProducts() {
         return products;
     }
 
-    public void setProducts(ArrayList<Integer> products) {
+    public void setProducts(Set<Product> products) {
         this.products = products;
     }
 
@@ -82,5 +91,26 @@ public class User {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Integer getBedTime() {
+        return bedTime;
+    }
+
+    public void setBedTime(Integer bedTime) {
+        this.bedTime = bedTime;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", company='" + company + '\'' +
+                ", password='" + password + '\'' +
+                ", bedTime=" + bedTime +
+                ", products=" + products +
+                ", roles=" + roles +
+                '}';
     }
 }

@@ -14,8 +14,6 @@ public class RegisterRequest {
     @NotBlank
     private String company;
 
-    private ArrayList<Integer> products;
-
     @NotBlank
     private String password;
 
@@ -23,40 +21,22 @@ public class RegisterRequest {
 
     public RegisterRequest(@JsonProperty("username") String username,
                            @JsonProperty("company") String company,
-                           @JsonProperty("products") ArrayList<Integer> products,
                            @JsonProperty("password")  String password,
                            @JsonProperty("roles") Set<String> roles) {
         this.username = username;
         this.company = company;
-        this.products = (ArrayList<Integer>) products;
         this.password = password;
         this.roles = roles;
     }
 
     @Override
     public String toString() {
-        return "UserDto{" +
+        return "RegisterRequest{" +
                 "username='" + username + '\'' +
                 ", company='" + company + '\'' +
-                ", products=" + products +
                 ", password='" + password + '\'' +
+                ", roles=" + roles +
                 '}';
-    }
-
-    public Set<String> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<String> roles) {
-        this.roles = roles;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getUsername() {
@@ -75,12 +55,19 @@ public class RegisterRequest {
         this.company = company;
     }
 
-    public ArrayList<Integer> getProducts() {
-        return products;
+    public String getPassword() {
+        return password;
     }
 
-    public void setProducts(ArrayList<Integer> products) {
-        this.products = products;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
+    public Set<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<String> roles) {
+        this.roles = roles;
+    }
 }

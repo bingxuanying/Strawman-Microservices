@@ -1,35 +1,42 @@
 package com.example.authservice.controller;
 
+import com.example.authservice.entities.Data;
+import com.example.authservice.entities.Product;
+import com.example.authservice.entities.User;
 import com.example.authservice.payload.request.RegisterRequest;
 import com.example.authservice.payload.response.ResBodyTemp;
+import com.example.authservice.repository.DataRepository;
+import com.example.authservice.repository.ProductRepository;
+import com.example.authservice.repository.UserRepository;
 import com.example.authservice.service.UserServiceImpl;
+import org.hibernate.procedure.spi.ParameterRegistrationImplementor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @RestController
-@RequestMapping("auth")
+@RequestMapping
 public class MainController {
 
     @Autowired
-    private AuthenticationManager authenticationManager;
+    private UserRepository userRepository;
 
-//    @Autowired
-//    private JwtUtil jwtUtil;
+    @Autowired
+    private DataRepository dataRepository;
 
-//    @Autowired
-//    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    private ProductRepository productRepository;
 
     private static final String REDIS_INDEX_KEY = "JWT";
 
     @Autowired
     private UserServiceImpl userService;
 
-//    public MainController(UserService userService) {
-//        this.userService = userService;
-//    }
 
     @PostMapping(value = "/register")
     public @ResponseBody ResBodyTemp register(@RequestBody @Valid RegisterRequest registerRequest) {
@@ -37,25 +44,57 @@ public class MainController {
         return new ResBodyTemp("VALIDATION_SUCCESS", "successfully registered");
     }
 
-//    @PostMapping(value = "/signin")
-//    public ResponseEntity<?> authenticateUser(@RequestBody @Valid LoginRequest loginRequest) throws Exception {
-//        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
-//
-//        if (authentication.isAuthenticated()) {
-//            SecurityContextHolder.getContext().setAuthentication(authentication);
-//        }
-//        else { return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Wrong username or password"); }
-//
-//        final String jwt = jwtUtil.generateToken(userService.loadUserByUsername(loginRequest.getUsername()));
-//
-//        /*
-//         * TODO: test save token to Redis
-//         */
-////        redisTemplate.opsForHash().put(REDIS_INDEX_KEY, 1,  jwt);
-//
-//        return ResponseEntity.ok(new AuthenticationResponse(jwt));
+//    @GetMapping(value = "/product")
+//    public void createProduct() {
+//        Product product = new Product();
+//        productRepository.save(product);
 //    }
-
+//
+//    @GetMapping(value = "/data")
+//    public void createData() {
+//        Data data = new Data();
+//        data.setFilePath("/a");
+//        Product product = productRepository.findById(Long.valueOf(1));
+//        data.setProduct(product);
+//        dataRepository.save(data);
+//    }
+//
+//    @DeleteMapping(value = "/data")
+//    public void deleteData() {
+//        Product product = productRepository.findById(Long.valueOf(1));
+//        Set<Data> dataToUpdate = product.getData();
+//
+//        Data dataToRemove = dataRepository.findById(Long.valueOf(1));
+//        dataToUpdate.remove(dataToRemove);
+//        product.setData(dataToUpdate);
+//
+//        productRepository.save(product);
+//    }
+//
+//
+//
+//    @GetMapping(value = "/data1")
+//    public void cretaeData1() {
+//        Data data = new Data();
+//        data.setFilePath("/a");
+//        dataRepository.save(data);
+//
+//        Product product = productRepository.findById(Long.valueOf(1));
+//        Set<Data> lst = product.getData();
+//        lst.add(data);
+//        product.setData(lst);
+//
+//        System.out.println(product.toString());
+//
+//        productRepository.save(product);
+//    }
+//
+//    @GetMapping(value = "/test")
+//    public void output() {
+//        Product product = productRepository.findById(Long.valueOf(1));
+//        System.out.println(product.toString());
+//    }
+//
 //    @PostMapping(value = "/authenticate")
 //    public boolean authenticateJwt(@RequestBody @Valid JwtRequest jwtRequest) {
 //        return jwtUtil.validateToken(jwtRequest.getJwt());

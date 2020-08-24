@@ -55,12 +55,12 @@ public class UsernamePasswordAuthFilter extends OncePerRequestFilter {
 
         redisTemplate.opsForHash().put("jwt", username, jwt);
 
-        System.out.println("jwt: " + redisTemplate.opsForHash().hasKey("jwt", username));
-        System.out.println("jwt: " + redisTemplate.opsForHash().get("jwt", username));
-        System.out.println("abc: " + redisTemplate.opsForHash().hasKey("jwt", "abc"));
-        System.out.println("abc: " + redisTemplate.opsForHash().get("jwt", "abc"));
-
-        System.out.println(redisTemplate.opsForHash().get("jwt", username).equals(jwt));
+//        System.out.println("jwt: " + redisTemplate.opsForHash().hasKey("jwt", username));
+//        System.out.println("jwt: " + redisTemplate.opsForHash().get("jwt", username));
+//        System.out.println("abc: " + redisTemplate.opsForHash().hasKey("jwt", "abc"));
+//        System.out.println("abc: " + redisTemplate.opsForHash().get("jwt", "abc"));
+//
+//        System.out.println(redisTemplate.opsForHash().get("jwt", username).equals(jwt));
     }
 
     @Override

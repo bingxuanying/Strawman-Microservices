@@ -1,6 +1,7 @@
 package com.example.authservice.service;
 
 import com.example.authservice.entities.ERole;
+import com.example.authservice.entities.Product;
 import com.example.authservice.entities.Role;
 import com.example.authservice.payload.request.RegisterRequest;
 import com.example.authservice.entities.User;
@@ -71,8 +72,9 @@ public class UserServiceImpl implements UserService {
         // Create new user
         User user = new User(registerRequest.getUsername(),
                 registerRequest.getCompany(),
-                (ArrayList<Integer>) registerRequest.getProducts(),
                 passwordEncoder.encode(registerRequest.getPassword()),
+                600,
+                new HashSet<Product>(),
                 roles);
 
         // Save to DB
