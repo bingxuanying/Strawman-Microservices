@@ -7,10 +7,13 @@ module.exports = (app, options) => {
     res.send("OK");
   });
 
-  app.get("/api/allProductId", (req, res, next) => {
+  app.post("/api/fetchTrapIDs", (req, res, next) => {
+    let { company } = req.body;
+
     repo
-      .getAllProductId()
+      .fetchTrapIDs(company)
       .then((IdArr) => {
+        console.log(IdArr);
         res.status(200).json(IdArr);
       })
       .catch(next);

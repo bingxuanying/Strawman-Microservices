@@ -1,5 +1,8 @@
 const express = require("express");
+
 const morgan = require("morgan");
+const bodyParser = require("body-parser");
+
 const api = require("../api/data");
 
 const start = (options) => {
@@ -15,7 +18,9 @@ const start = (options) => {
     }
 
     const app = express();
+
     app.use(morgan("combined"));
+    app.use(bodyParser.json());
 
     api(app, options);
 

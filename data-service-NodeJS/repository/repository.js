@@ -1,12 +1,14 @@
 "use strict";
 
-"use strict";
-
 const repository = (db) => {
-  const getAllProductId = () => {};
+  const fetchTrapIDs = (company) => {
+    return db.query(`SELECT * FROM users WHERE company=${company};`, [
+      "brianc",
+    ]);
+  };
 
   return Object.create({
-    getAllProductId,
+    fetchTrapIDs,
   });
 };
 
