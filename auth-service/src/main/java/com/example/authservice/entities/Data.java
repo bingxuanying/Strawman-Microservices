@@ -27,7 +27,7 @@ public class Data {
 
     private Integer particleCount;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "product")
     private Product product;

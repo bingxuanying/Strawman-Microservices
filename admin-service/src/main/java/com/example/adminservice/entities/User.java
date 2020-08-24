@@ -1,8 +1,7 @@
 package com.example.adminservice.entities;
 
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username", "company"}))
@@ -17,6 +16,8 @@ public class User {
     private String company;
 
     private String password;
+
+    private Integer bedTime;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "users_products", joinColumns = @JoinColumn(name = "user_id",
@@ -34,11 +35,12 @@ public class User {
     public User() {
     }
 
-    public User(String username, String company, String password, Set<Product> products, Set<Role> roles) {
+    public User(String username, String company, String password, Integer bedTime, Set<Product> products, Set<Role> roles) {
         this.username = username;
         this.company = company;
         this.products = products;
         this.password = password;
+        this.bedTime = bedTime;
         this.roles = roles;
     }
 
@@ -91,6 +93,14 @@ public class User {
         this.roles = roles;
     }
 
+    public Integer getBedTime() {
+        return bedTime;
+    }
+
+    public void setBedTime(Integer bedTime) {
+        this.bedTime = bedTime;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -98,6 +108,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", company='" + company + '\'' +
                 ", password='" + password + '\'' +
+                ", bedTime=" + bedTime +
                 ", products=" + products +
                 ", roles=" + roles +
                 '}';
