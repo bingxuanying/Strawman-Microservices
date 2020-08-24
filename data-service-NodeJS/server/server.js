@@ -8,17 +8,18 @@ const start = (options) => {
       reject(
         new Error("The server must be started with a connected respository")
       );
-      if (!options.port) {
-        reject(new Error("The server must be started with an available port"));
-      }
-
-      const app = express();
-      app.use(morgan("combined"));
-
-      api(app, options);
-
-      const server = app.listen(options.port, () => resolve(server));
     }
+
+    if (!options.port) {
+      reject(new Error("The server must be started with an available port"));
+    }
+
+    const app = express();
+    app.use(morgan("combined"));
+
+    api(app, options);
+
+    const server = app.listen(options.port, () => resolve(server));
   });
 };
 

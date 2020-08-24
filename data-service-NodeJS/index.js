@@ -15,9 +15,9 @@ process.on("unhandledRejection", (err, promise) => {
   console.error("Unhandled Rejection", err);
 });
 
-mediator.emit("boot.ready");
-
 config.postgres.connect(mediator);
+
+mediator.emit("boot.ready");
 
 mediator.on("db.ready", (db) => {
   let rep;
