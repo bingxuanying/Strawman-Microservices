@@ -21,7 +21,7 @@ public class UsernamePasswordAuthProvider implements AuthenticationProvider {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) {
 
         String username = authentication.getName();
         String password = (String) authentication.getCredentials();

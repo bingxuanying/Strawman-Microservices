@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "user")
+@RequestMapping(value = "admin/user")
 public class UserController {
 
     @Autowired

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping(value = "product")
+@RequestMapping(value = "admin/product")
 public class ProductController {
 
     @Autowired
