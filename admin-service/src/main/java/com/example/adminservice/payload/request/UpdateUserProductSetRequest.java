@@ -9,37 +9,38 @@ import java.util.List;
 public class UpdateUserProductSetRequest {
 
     @NotNull
-    private List<Integer> idArr;
+    private List<Integer> idSet;
 
     @NotBlank
-    private String company;
+    private String cliUsername;
 
-    public UpdateUserProductSetRequest(@JsonProperty("idArr") List<Integer> idArr, @JsonProperty("company") String company) {
-        this.idArr = idArr;
-        this.company = company;
+    public UpdateUserProductSetRequest(@JsonProperty("idSet") List<Integer> idSet,
+                                       @JsonProperty("cliUsername") String cliUsername) {
+        this.idSet = idSet;
+        this.cliUsername = cliUsername;
     }
 
-    public List<Integer> getIdArr() {
-        return idArr;
+    public List<Integer> getIdSet() {
+        return idSet;
     }
 
-    public void setIdArr(List<Integer> idArr) {
-        this.idArr = idArr;
+    public void setIdSet(List<Integer> idSet) {
+        this.idSet = idSet;
     }
 
-    public String getCompany() {
-        return company;
+    public String getCliUsername() {
+        return cliUsername;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCliUsername(String cliUsername) {
+        this.cliUsername = cliUsername;
     }
 
     @Override
     public String toString() {
         return "UpdateUserProductSetRequest{" +
-                "idArr=" + idArr +
-                ", company='" + company + '\'' +
+                "idSet=" + idSet +
+                ", cliUsername='" + cliUsername + '\'' +
                 '}';
     }
 }

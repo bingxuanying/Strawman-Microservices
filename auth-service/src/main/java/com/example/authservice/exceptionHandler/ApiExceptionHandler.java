@@ -1,5 +1,6 @@
-package com.example.authservice.payload.response;
+package com.example.authservice.exceptionHandler;
 
+import com.example.authservice.payload.response.ResBodyTemp;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;

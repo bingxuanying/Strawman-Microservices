@@ -8,7 +8,10 @@ import com.example.dataservice.payload.response.DataSetResponse;
 import com.example.dataservice.repository.DataRepository;
 import com.example.dataservice.repository.ProductRepository;
 import com.example.dataservice.repository.UserRepository;
+import com.example.dataservice.security.model.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -45,7 +48,6 @@ public class UserServiceImpl implements UserService {
 
         List<DataModel> newDataSet = new ArrayList<>();
         for (Data data : dataSet) {
-            System.out.println(data.getFilePath());
             DataModel newData = new DataModel(data.getTimestamp(),
                     data.getFilePath(),
                     data.getCroppedFilePath(),
@@ -68,5 +70,17 @@ public class UserServiceImpl implements UserService {
         userToUpdate.setBedTime(milisec);
 
         userRepository.save(userToUpdate);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Invaild username or password");
+        }
+
+        return new SecurityUser(user);
     }
 }

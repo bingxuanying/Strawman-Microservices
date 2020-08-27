@@ -1,17 +1,15 @@
 package com.example.authservice.security.filters;
 
-import com.example.authservice.repository.UserRepository;
+import com.example.authservice.entities.ERole;
 import com.example.authservice.security.authentications.UsernamePasswordAuthentication;
-import com.example.authservice.security.model.SecurityUser;
 import com.example.authservice.util.JwtUtil;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.cache.CacheProperties;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -34,10 +32,11 @@ public class UsernamePasswordAuthFilter extends OncePerRequestFilter {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws IOException {
 
         String bodyStr = request.getReader().lines().collect(Collectors.joining(System.lineSeparator()));
-
         ObjectMapper mapper = new ObjectMapper();
         JsonNode bodyJson = mapper.readTree(bodyStr);
 
@@ -51,20 +50,23 @@ public class UsernamePasswordAuthFilter extends OncePerRequestFilter {
 
 
         final String jwt = jwtUtil.generateToken(username);
-        System.out.println(jwt);
 
         redisTemplate.opsForHash().put("jwt", username, jwt);
 
-//        System.out.println("jwt: " + redisTemplate.opsForHash().hasKey("jwt", username));
-//        System.out.println("jwt: " + redisTemplate.opsForHash().get("jwt", username));
-//        System.out.println("abc: " + redisTemplate.opsForHash().hasKey("jwt", "abc"));
-//        System.out.println("abc: " + redisTemplate.opsForHash().get("jwt", "abc"));
-//
-//        System.out.println(redisTemplate.opsForHash().get("jwt", username).equals(jwt));
+        response.setHeader("Authorization", jwt);
+        response.setHeader("username", authentication.getName());
+        response.setHeader("company", authentication.getName());
+
+        if (authentication.getAuthorities().contains(new SimpleGrantedAuthority(ERole.ROLE_ADMIN.name()))) {
+            response.setHeader("role", "admin");
+        } else {
+            response.setHeader("role", "user");
+        }
+
     }
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return !request.getServletPath().equals("/login");
+        return !request.getServletPath().equals("/auth/login");
     }
 }

@@ -9,12 +9,12 @@ public class CreateProductRequest {
     @NotNull
     private int num;
 
-    private String company;
+    private String cliUsername;
 
     public CreateProductRequest(@JsonProperty("num") int num,
-                                @JsonProperty("company") String company) {
+                                @JsonProperty("cliUsername") String cliUsername) {
         this.num = num;
-        this.company = company == null ? " " : company;
+        this.cliUsername = cliUsername == null ? " " : cliUsername;
     }
 
     public int getNum() {
@@ -25,19 +25,19 @@ public class CreateProductRequest {
         this.num = num;
     }
 
-    public String getCompany() {
-        return company;
+    public String getCliUsername() {
+        return cliUsername;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCliUsername(String cliUsername) {
+        this.cliUsername = cliUsername;
     }
 
     @Override
     public String toString() {
         return "ProductRequest{" +
                 "num=" + num +
-                ", company='" + company + '\'' +
+                ", cliUsername='" + cliUsername + '\'' +
                 '}';
     }
 }

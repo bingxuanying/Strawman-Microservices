@@ -29,7 +29,7 @@ public class UsernamePasswordAuthProvider implements AuthenticationProvider {
         UserDetails user = userService.loadUserByUsername(username);
 
         if(passwordEncoder.matches(password, user.getPassword())) {
-            return new UsernamePasswordAuthentication(username, password, authentication.getAuthorities());
+            return new UsernamePasswordAuthentication(username, password, user.getAuthorities());
         }
 
         throw new BadCredentialsException("Wrong username or password");

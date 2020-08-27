@@ -7,8 +7,11 @@ import com.example.adminservice.entities.User;
 import com.example.adminservice.repository.DataRepository;
 import com.example.adminservice.repository.ProductRepository;
 import com.example.adminservice.repository.UserRepository;
+import com.example.adminservice.security.model.SecurityUser;
 import com.example.adminservice.util.AWSS3Util;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.imageio.ImageIO;
@@ -39,10 +42,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    public Object createProduct(String company) {
+    public Object createProduct(String cliUsername) {
         Product product = new Product();
 
-        if (!company.isBlank()) { return updateUserProductSet(product, company); }
+        if (!cliUsername.isBlank()) { return updateUserProductSet(product, cliUsername); }
         else { return productRepository.save(product); }
     }
 
@@ -50,9 +53,9 @@ public class UserServiceImpl implements UserService {
         return productRepository.findById(Long.valueOf(i));
     }
 
-    public List<Integer> getProductSetByCompany(String company) {
+    public List<Integer> getProductSetByUsername(String cliUsername) {
 
-        User user = userRepository.findByCompany(company);
+        User user = userRepository.findByUsername(cliUsername);
         List<Integer> productIdSet = new ArrayList<>();
         for (Product product : user.getProducts()) {
             Integer intValue = product.getId().intValue();
@@ -61,9 +64,9 @@ public class UserServiceImpl implements UserService {
         return productIdSet;
     }
 
-    public User updateUserProductSet(Product product, String company) {
+    public User updateUserProductSet(Product product, String cliUsername) {
 
-        User userToUpdate = userRepository.findByCompany(company);
+        User userToUpdate = userRepository.findByUsername(cliUsername);
         Set<Product> newProductSet = userToUpdate.getProducts();
         newProductSet.add(product);
         userToUpdate.setProducts(newProductSet);
@@ -71,10 +74,10 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(userToUpdate);
     }
 
-    public User deleteUserProductSet(Integer id, String company) {
+    public User deleteUserProductSet(Integer id, String cliUsername) {
 
         Product product = productRepository.findById(Long.valueOf(id));
-        User userToUpdate = userRepository.findByCompany(company);
+        User userToUpdate = userRepository.findByUsername(cliUsername);
         Set<Product> newProductSet = userToUpdate.getProducts();
         newProductSet.remove(product);
         userToUpdate.setProducts(newProductSet);
@@ -135,7 +138,6 @@ public class UserServiceImpl implements UserService {
     private ByteArrayInputStream writeImage(HttpServletRequest request, String filename) throws IOException {
         byte [] rawData = request.getInputStream().readAllBytes();
 
-//        Check if head part of data is correct
         ByteArrayOutputStream agent = new ByteArrayOutputStream();
         agent.write(rawData);
         if (rawData[0] == 216 && rawData[1] == 255) {
@@ -144,10 +146,22 @@ public class UserServiceImpl implements UserService {
         }
         byte[] data = agent.toByteArray();
 
-//        Write them into file
         ByteArrayInputStream bis = new ByteArrayInputStream(data);
+        return bis;
+
 //        BufferedImage bImage = ImageIO.read(bis);
 //        return ImageIO.write(bImage, "jpeg", new File(filename) );
-        return bis;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        User user = userRepository.findByUsername(username);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("Invaild username or password");
+        }
+
+        return new SecurityUser(user);
     }
 }

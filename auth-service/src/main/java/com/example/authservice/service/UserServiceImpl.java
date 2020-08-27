@@ -3,22 +3,18 @@ package com.example.authservice.service;
 import com.example.authservice.entities.ERole;
 import com.example.authservice.entities.Product;
 import com.example.authservice.entities.Role;
-import com.example.authservice.payload.request.RegisterRequest;
 import com.example.authservice.entities.User;
+import com.example.authservice.payload.request.RegisterRequest;
 import com.example.authservice.repository.RoleRepository;
 import com.example.authservice.repository.UserRepository;
 import com.example.authservice.security.model.SecurityUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -31,11 +27,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-
-    public UserServiceImpl(UserRepository userRepository, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-    }
 
     @Override
     public User save(RegisterRequest registerRequest) {
@@ -62,7 +53,7 @@ public class UserServiceImpl implements UserService {
                         roles.add(modRole);
                         break;
                     default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                                 .orElseThrow(() -> new RuntimeException("Error: Role(User) is not found"));
                         roles.add(userRole);
                 }
@@ -71,7 +62,6 @@ public class UserServiceImpl implements UserService {
 
         // Create new user
         User user = new User(registerRequest.getUsername(),
-                registerRequest.getCompany(),
                 passwordEncoder.encode(registerRequest.getPassword()),
                 600,
                 new HashSet<Product>(),

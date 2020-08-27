@@ -25,7 +25,9 @@ public class MainController {
     @GetMapping(value = "/fetchTrapIDs")
     public @ResponseBody
     TrapIDsResponse fetchTrapIDs(Authentication authentication) {
-        String username = "Neal";
+        System.out.println(authentication.getName());
+
+        String username = authentication.getName();
         List<Integer> IDSet = userService.fetchTrapIDs(username);
         Collections.sort(IDSet);
         return new TrapIDsResponse(IDSet);
@@ -34,7 +36,7 @@ public class MainController {
     @PostMapping(value = "/fetchRecordsByID")
     public @ResponseBody
     DataSetResponse fetchRecordsByID(Authentication authentication, @RequestBody @Valid FetchRecordsRequest request) {
-        String username = "Neal";
+        String username = authentication.getName();
         Integer trapID = request.getId();
 
         List<Integer> IDSet = userService.fetchTrapIDs(username);
@@ -50,7 +52,7 @@ public class MainController {
 
     @PostMapping(value = "/setBedTime")
     public boolean setBedTime(Authentication authentication, @RequestBody @Valid SetBedTimeRequest request) {
-        String username = "Neal";
+        String username = authentication.getName();
         Integer milisec = request.getMilisec();
         userService.setBedTime(username, milisec);
         return true;

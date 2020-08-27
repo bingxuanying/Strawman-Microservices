@@ -7,24 +7,24 @@ import javax.validation.constraints.NotBlank;
 public class GetUserProductSetRequest {
 
     @NotBlank
-    private String company;
+    private String cliUsername;
 
-    public GetUserProductSetRequest(@JsonProperty("company") String company) {
-        this.company = company;
+    public GetUserProductSetRequest(@JsonProperty("cliUsername") String cliUsername) {
+        this.cliUsername = cliUsername;
     }
 
-    public String getCompany() {
-        return company;
+    public String getCliUsername() {
+        return cliUsername;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setCliUsername(String cliUsername) {
+        this.cliUsername = cliUsername;
     }
 
     @Override
     public String toString() {
         return "GetProductsResponse{" +
-                "company='" + company + '\'' +
+                "cliUsername='" + cliUsername + '\'' +
                 '}';
     }
 }

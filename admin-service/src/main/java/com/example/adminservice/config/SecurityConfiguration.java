@@ -1,7 +1,7 @@
 package com.example.adminservice.config;
 
-//import com.example.adminservice.security.filters.UsernamePasswordAuthFilter;
-//import com.example.adminservice.security.providers.UsernamePasswordAuthProvider;
+import com.example.adminservice.security.filters.TokenAuthFilter;
+import com.example.adminservice.security.providers.TokenAuthProvider;
 import com.example.adminservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -18,42 +18,45 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-//    @Autowired
-//    private UsernamePasswordAuthProvider usernamePasswordAuthProvider;
-//
-//    @Autowired
-//    private UserService userService;
-//
-//    @Bean
-//    public BCryptPasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-//
-//    @Bean
-//    @Override
-//    public AuthenticationManager authenticationManagerBean() throws Exception {
-//        return super.authenticationManagerBean();
-//    }
-//
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.authenticationProvider(usernamePasswordAuthProvider);
-//    }
-//
-//    @Bean
-//    public UsernamePasswordAuthFilter usernamePasswordAuthFilter() {
-//        return new UsernamePasswordAuthFilter();
-//    }
+    @Autowired
+    private TokenAuthProvider tokenAuthProvider;
+
+    @Autowired
+    private UserService userService;
+
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.authenticationProvider(tokenAuthProvider);
+    }
+
+    @Bean
+    public TokenAuthFilter tokenAuthFilter() {
+        return new TokenAuthFilter();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and()
                 .csrf()
                 .disable()
-                .authorizeRequests().antMatchers("/**").permitAll()
-                .anyRequest().authenticated();
+                .authorizeRequests()
+                .antMatchers("/admin/uploadImage")
+                .permitAll()
+                .anyRequest()
+                .access("hasRole('ROLE_ADMIN')");
 
-//        http.addFilterAt(usernamePasswordAuthFilter(),
-//                BasicAuthenticationFilter.class);
+        http.addFilterAt(tokenAuthFilter(),
+                BasicAuthenticationFilter.class);
     }
 }

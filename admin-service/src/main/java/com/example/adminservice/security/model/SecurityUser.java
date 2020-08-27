@@ -1,7 +1,7 @@
-package com.example.authservice.security.model;
+package com.example.adminservice.security.model;
 
-import com.example.authservice.entities.Role;
-import com.example.authservice.entities.User;
+import com.example.adminservice.entities.Role;
+import com.example.adminservice.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

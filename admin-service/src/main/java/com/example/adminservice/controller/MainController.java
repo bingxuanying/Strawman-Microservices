@@ -33,13 +33,13 @@ public class MainController {
     @PostMapping(value = "/create")
     public void createProduct(@RequestBody @Valid CreateProductRequest request) {
         Integer num = request.getNum();
-        for(int i = 0; i < num; i++) { userService.createProduct(request.getCompany()); }
+        for(int i = 0; i < num; i++) { userService.createProduct(request.getCliUsername()); }
     }
 
 //    Fetch product set from specific user
     @PostMapping(value = "/productSet")
-    public List<Integer> getUserProductSet(@RequestBody @Valid GetUserProductSetRequest request) {
-        List<Integer> IdArr = userService.getProductSetByCompany(request.getCompany());
+    public List<Integer> getCompanyProductSet(@RequestBody @Valid GetUserProductSetRequest request) {
+        List<Integer> IdArr = userService.getProductSetByUsername(request.getCliUsername());
         Collections.sort(IdArr);
         return IdArr;
     }
@@ -47,17 +47,17 @@ public class MainController {
 //    Assign product to specific user
     @PutMapping(value = "/productSet")
     public void updateUserProductSet(@RequestBody @Valid UpdateUserProductSetRequest request) {
-        for (Integer id : request.getIdArr()) {
+        for (Integer id : request.getIdSet()) {
             Product product = userService.getProductById(id);
-            userService.updateUserProductSet(product, request.getCompany());
+            userService.updateUserProductSet(product, request.getCliUsername());
         }
     }
 
 //    Remove product from specific user
     @DeleteMapping(value = "/productSet")
     public void deleteUserProductSet(@RequestBody @Valid UpdateUserProductSetRequest request) {
-        for (Integer id : request.getIdArr()) {
-            userService.deleteUserProductSet(id, request.getCompany());
+        for (Integer id : request.getIdSet()) {
+            userService.deleteUserProductSet(id, request.getCliUsername());
         }
     }
 

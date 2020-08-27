@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.*;
 
 @Entity
-@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"username", "company"}))
+@Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
 public class User {
 
     @Id
@@ -13,7 +13,6 @@ public class User {
 
     private String username;
 
-    private String company;
 
     private String password;
 
@@ -35,9 +34,8 @@ public class User {
     public User() {
     }
 
-    public User(String username, String company, String password, Integer bedTime, Set<Product> products, Set<Role> roles) {
+    public User(String username, String password, Integer bedTime, Set<Product> products, Set<Role> roles) {
         this.username = username;
-        this.company = company;
         this.products = products;
         this.password = password;
         this.bedTime = bedTime;
@@ -59,14 +57,6 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getCompany() {
-        return company;
-    }
-
-    public void setCompany(String company) {
-        this.company = company;
     }
 
     public Set<Product> getProducts() {
@@ -106,7 +96,6 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
-                ", company='" + company + '\'' +
                 ", password='" + password + '\'' +
                 ", bedTime=" + bedTime +
                 ", products=" + products +
