@@ -10,10 +10,10 @@ import java.util.List;
 
 @Repository
 public interface DataRepository extends JpaRepository<Data, Integer> {
-    Data findByID(Long id);
+    Data findById(Long id);
 
-    List<Data> findAllByProductID(Product product);
+    List<Data> findAllByProduct(Product product);
 
     @Transactional
-    void deleteByID(Long id);
+    void deleteById(Long id);
 }

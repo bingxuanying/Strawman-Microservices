@@ -9,24 +9,24 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class TrapIDsResponse {
 
-    private List<Integer> IdArr;
+    private List<Integer> idSet;
 
-    public TrapIDsResponse(List<Integer> idArr) {
-        IdArr = idArr;
+    public TrapIDsResponse(List<Integer> idSet) {
+        this.idSet = idSet;
     }
 
-    public List<Integer> getIdArr() {
-        return IdArr;
+    public List<Integer> getIdSet() {
+        return idSet;
     }
 
-    public void setIdArr(List<Integer> idArr) {
-        IdArr = idArr;
+    public void setIdSet(List<Integer> idSet) {
+        this.idSet = idSet;
     }
 
     @Override
     public String toString() {
-        return "TrapIDResponse{" +
-                "IdArr=" + IdArr +
+        return "TrapIDsResponse{" +
+                "idSet=" + idSet +
                 '}';
     }
 }

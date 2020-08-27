@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
     public List<DataModel> fetchRecordsByID(Integer trapID) {
 
         Product product = productRepository.findById(Long.valueOf(trapID));
-        List<Data> dataSet = dataRepository.findAllByProductID(product);
+        List<Data> dataSet = dataRepository.findAllByProduct(product);
 
         List<DataModel> newDataSet = new ArrayList<>();
         for (Data data : dataSet) {

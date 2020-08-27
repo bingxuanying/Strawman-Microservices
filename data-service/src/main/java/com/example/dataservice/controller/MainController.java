@@ -1,7 +1,8 @@
 package com.example.dataservice.controller;
 
 import com.example.dataservice.models.DataModel;
-import com.example.dataservice.payload.request.IntegerRequest;
+import com.example.dataservice.payload.request.FetchRecordsRequest;
+import com.example.dataservice.payload.request.SetBedTimeRequest;
 import com.example.dataservice.payload.response.DataSetResponse;
 import com.example.dataservice.payload.response.TrapIDsResponse;
 import com.example.dataservice.service.UserServiceImpl;
@@ -32,9 +33,9 @@ public class MainController {
 
     @PostMapping(value = "/fetchRecordsByID")
     public @ResponseBody
-    DataSetResponse fetchRecordsByID(Authentication authentication, @RequestBody @Valid IntegerRequest request) {
+    DataSetResponse fetchRecordsByID(Authentication authentication, @RequestBody @Valid FetchRecordsRequest request) {
         String username = "Neal";
-        Integer trapID = request.getID();
+        Integer trapID = request.getId();
 
         List<Integer> IDSet = userService.fetchTrapIDs(username);
 
@@ -48,11 +49,10 @@ public class MainController {
     }
 
     @PostMapping(value = "/setBedTime")
-    public boolean setBedTime(Authentication authentication, @RequestBody @Valid IntegerRequest request) {
+    public boolean setBedTime(Authentication authentication, @RequestBody @Valid SetBedTimeRequest request) {
         String username = "Neal";
-        Integer milisec = request.getID();
+        Integer milisec = request.getMilisec();
         userService.setBedTime(username, milisec);
         return true;
     }
-
 }

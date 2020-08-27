@@ -12,21 +12,21 @@ public class DataSetResponse {
 
     private List<DataModel> dataSet;
 
-    public DataSetResponse(List<DataModel> idArr) {
-        dataSet = idArr;
+    public DataSetResponse(List<DataModel> dataSet) {
+        this.dataSet = dataSet;
     }
 
-    public List<DataModel> getIdArr() {
+    public List<DataModel> getDataSet() {
         return dataSet;
     }
 
-    public void setIdArr(List<DataModel> idArr) {
-        dataSet = idArr;
+    public void setDataSet(List<DataModel> dataSet) {
+        this.dataSet = dataSet;
     }
 
     @Override
     public String toString() {
-        return "TrapIDResponse{" +
+        return "DataSetResponse{" +
                 "dataSet=" + dataSet +
                 '}';
     }
