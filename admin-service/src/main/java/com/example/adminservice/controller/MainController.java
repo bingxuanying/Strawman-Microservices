@@ -24,7 +24,7 @@ public class MainController {
     @Autowired
     private UserServiceImpl userService;
 
-    @GetMapping
+    @GetMapping(value = "/userProfiles")
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
@@ -34,6 +34,12 @@ public class MainController {
     public void createProduct(@RequestBody @Valid CreateProductRequest request) {
         Integer num = request.getNum();
         for(int i = 0; i < num; i++) { userService.createProduct(request.getCliUsername()); }
+    }
+
+//    Fetch all product IDs
+    @GetMapping(value = "/productSet")
+    public List<Integer> getProductIds() {
+        return userService.getProductIds();
     }
 
 //    Fetch product set from specific user

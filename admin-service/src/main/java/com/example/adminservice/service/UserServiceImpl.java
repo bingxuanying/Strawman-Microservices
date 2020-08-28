@@ -42,6 +42,17 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    public List<Integer> getProductIds() {
+        List<Product> productSet = productRepository.findAll();
+        List<Integer> idSet = new ArrayList<>();
+
+        for (Product product : productSet) {
+            idSet.add(Math.toIntExact(product.getId()));
+        }
+
+        return idSet;
+    }
+
     public Object createProduct(String cliUsername) {
         Product product = new Product();
 
