@@ -105,6 +105,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>data-service</finalName>
 	</build>
 
 </project>

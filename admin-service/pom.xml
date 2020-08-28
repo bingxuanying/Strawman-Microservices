@@ -112,6 +112,7 @@
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
+		<finalName>admin-service</finalName>
 	</build>
 
 </project>
