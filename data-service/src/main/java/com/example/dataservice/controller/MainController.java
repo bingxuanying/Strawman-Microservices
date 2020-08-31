@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "api")
+@RequestMapping
 public class MainController {
 
     @Autowired
