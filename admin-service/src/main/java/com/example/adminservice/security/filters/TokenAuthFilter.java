@@ -35,6 +35,6 @@ public class TokenAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        return request.getServletPath().equals("/admin/uploadImage");
+        return request.getServletPath().equals("/uploadImage");
     }
 }
